@@ -1,0 +1,182 @@
+﻿@model WebApp.Models.UserMaster
+
+@{
+    ViewBag.Title = "Sign Up";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm())
+{
+
+    <div class="form-horizontal">
+        <h4 class = "text-danger">@ViewBag.ErrorMessage</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                <span class="text-danger field-validation-error" data-valmsg-for="Password" data-valmsg-replace="true">
+                    <span id="Password-error"></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.RadioButton("Gender", "Male") Male
+                @Html.RadioButton("Gender", "Female") Female
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountryId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CountryId, ViewBag.CountryList as SelectList, "-- Select Country Name --", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StateId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StateId, new SelectList(""), "-- Select States --", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Sign Up" class="btn btn-default" id="signUp" />
+            </div>
+        </div>
+    </div>
+}
+
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#CountryId").change(function () {
+            var countryId = $(this).val();
+            if (countryId == "") {
+                $("#StateId").empty();
+                $("#StateId").append('<option value="">-- Select States --</option>');
+            }
+            debugger
+            $.ajax({
+                type: "post",
+                url: "/UserMasters/GetStateList?Cid=" + countryId,
+                contentType: "html",
+                success: function (response) {
+                    debugger
+                    $("#StateId").empty();
+                    $("#StateId").append(response);
+                }
+            })
+
+            $.ajax({
+                type: "post",
+                url: "/UserMasters/GetPhoneCode?Cid=" + countryId,
+                contentType: "html",
+                success: function (response) {
+                    debugger
+                    $("#Phone").val(response);
+                }
+            })
+        })
+    })
+    function pwdCheck() {
+        var pwd = $("#Password").val();
+        debugger
+        var reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[#$%^&*()]).{8,20}$/
+        if (pwd == "") {
+            $("#Password-error").html("The Password field is required.")
+        }
+        else if (!(reg.test(pwd))) {
+            $("#Password-error").html("Please enter valid Passord, should contain atleast one Upper & Lower character, Digit and Special character")
+        }
+        else {
+            $("#Password-error").html("")
+        }
+    }
+    $("#Password").focusout(pwdCheck);
+    $("#signUp").click(pwdCheck);
+</script>
+@section scripts{
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#Age").datepicker({
+                showOn: 'both',
+                buttonText: "Date of Birth",
+                changeMonth: true,
+                changeYear: true,
+                onSelect: function (selectdate) {
+                    var givenDate = new Date(selectdate);
+                    var presentDate = new Date();
+                    var Age = presentDate.getFullYear() - givenDate.getFullYear();
+                    if (Age <= 18) {
+                        alert("Age should be minimum 18");
+                    }
+                    else {
+                        $("#Age").val(Age);
+                    }
+                }
+            });
+        });
+    </script>
+}
