@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<WebApp.Models.UserMaster>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Details";
 }
 
-<h2>Index</h2>
+<h2>User Details</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -76,11 +73,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.StateId)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.UserId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.UserId })
-        </td>
+        
     </tr>
 }
 

@@ -3,20 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private POCEntities db = new POCEntities();
         public ActionResult Index()
         {
-            return View();
+            string userName = Session["UserName"].ToString();
+            if (userName != "")
+            {
+                var user = db.UserMasters.Where(x => x.UserName == userName).FirstOrDefault();
+                user.Country = db.Countries.Where(u => u.CountryId == user.CountryId).Select(u => u.CountryName).FirstOrDefault();
+                user.State = db.States.Where(u => u.CountryId == user.CountryId).Select(u => u.StateName).FirstOrDefault();
+                return View(user);
+            }
+            else
+                return View();
         }
 
-        public ActionResult About()
+        public ActionResult Home()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 

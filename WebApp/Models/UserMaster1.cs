@@ -9,6 +9,8 @@ namespace WebApp.Models
     [MetadataType(typeof(UserMasterMetadata))]
     public partial class UserMaster
     {
+        public string Country { get; set; }
+        public string State { get; set; }
     }
 
     public partial class UserMasterMetadata

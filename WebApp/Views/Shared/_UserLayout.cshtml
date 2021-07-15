@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -16,12 +16,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Mobile App", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Mobile App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Sign In", "SignIn", "UserMasters")</li>
-                    <li>@Html.ActionLink("Sign Up", "SignUp", "UserMasters")</li>
+                    <li>@Html.ActionLink("Country", "Country", "Address")</li>
+                    <li>@Html.ActionLink("State", "State", "Address")</li>
+                    <li>@Html.ActionLink("Sign Out", "SignOut", "UserMasters")</li>
                 </ul>
             </div>
         </div>
