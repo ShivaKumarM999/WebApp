@@ -1,0 +1,2 @@
+{"CountryId":1,"StateName":"Kerala"}
+{"CountryId":1,"StateName":"Tamil Nadu"}
